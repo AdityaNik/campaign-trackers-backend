@@ -9,12 +9,14 @@ const prisma = new PrismaClient();
 
 const strategyrouter = Router();
 
-strategyrouter.get("/", async (req, res) => {
+strategyrouter.post("/", async (req, res) => {
   try {
-    // Wait for the Prisma query to finish before proceeding
+    
+    let {id_b} = req.body
+
     const business = await prisma.business.findUnique({
       where: {
-        id: 1,
+        id: id_b,
       },
     });
 
@@ -22,7 +24,7 @@ strategyrouter.get("/", async (req, res) => {
       return res.status(404).json({ error: "Business not found" });
     }
 
-    const prompt = `Develop a comprehensive business strategy for ${business.name} which is from ${business.industry} which targets people of age group ${business.targetAge}
+    const prompt = `Develop a comprehensive business strategy for ${business.businessName} they have a product called ${business.productName} which is from ${business.industry} which targets people of age group ${business.targetAge}
     The business is targeting people in ${business.targetLocation}.The description of the company is ${business.description} and budget of business is ${business.budget}
     Business Goals: Define short-term and long-term goals.
 
