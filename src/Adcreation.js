@@ -61,31 +61,31 @@ Adcreationrouter.post("/", async (req, res) => {
       image_url:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUEUlOnq4vcn36RNY2RceVfl9lVWXO7Ns8cA&s",
     },
-    {
-      backgroundImage:
-        "https://blog.muscleblaze.com/wp-content/uploads/2023/04/B10.jpg",
-      titleText: "Complete ur intake with Muscle Blaze",
-      qrCode: "https://www.bannerbear.com",
-      description: "Build physique with us , Scan the code for the discount",
-      image_url:
-        "https://blog.muscleblaze.com/wp-content/uploads/2023/04/B10.jpg",
-    },
-    {
-      backgroundImage:
-        "https://wallpapers.com/images/hd/gold-standard-whey-protein-powder-container-7l4mz2bz27jzwuqt.jpg",
-      titleText: "Muscle Blaze for the best",
-      qrCode: "https://www.bannerbear.com",
-      description: "Get the best , Scan and win the prize",
-      image_url:
-        "https://wallpapers.com/images/hd/gold-standard-whey-protein-powder-container-7l4mz2bz27jzwuqt.jpg",
-    },
+    // {
+    //   backgroundImage:
+    //     "https://blog.muscleblaze.com/wp-content/uploads/2023/04/B10.jpg",
+    //   titleText: "Complete ur intake with Muscle Blaze",
+    //   qrCode: "https://www.bannerbear.com",
+    //   description: "Build physique with us , Scan the code for the discount",
+    //   image_url:
+    //     "https://blog.muscleblaze.com/wp-content/uploads/2023/04/B10.jpg",
+    // },
+    // {
+    //   backgroundImage:
+    //     "https://wallpapers.com/images/hd/gold-standard-whey-protein-powder-container-7l4mz2bz27jzwuqt.jpg",
+    //   titleText: "Muscle Blaze for the best",
+    //   qrCode: "https://www.bannerbear.com",
+    //   description: "Get the best , Scan and win the prize",
+    //   image_url:
+    //     "https://wallpapers.com/images/hd/gold-standard-whey-protein-powder-container-7l4mz2bz27jzwuqt.jpg",
+    // },
   ];
 
   const results = [];
 
   for (const ad of ads) {
     const data = {
-      template: "Kp21rAZjYgyGb6eLnd", // Replace with your actual template ID
+      template: "agXkA3Dw1aXWZW2VBY", // Replace with your actual template ID
       modifications: [
         {
           name: "message",
