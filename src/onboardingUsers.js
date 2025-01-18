@@ -34,14 +34,9 @@ router.post('/', async (req, res) => {
     })
 });
 
-router.get('/getUsers/:businessId', async (req, res) => {
-    const { businessId } = req.params;
+router.get('/getUsers', async (req, res) => {
 
-    const result = await prisma.campaignUser.findMany({
-        where: {
-            businessId: parseInt(businessId)
-        }
-    })
+    const result = await prisma.campaignUser.findMany()
 
     res.json({
         msg: 'Onboarding created successfully',
