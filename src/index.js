@@ -3,6 +3,7 @@ import cors from 'cors';
 import strategyrouter from './strategy.js';
 import onboardingrouter from './OnbordingRoutes.js';
 import Adcreationrouter from './Adcreation.js';
+import onBoardUsers from './onboardingUsers.js';
 
 const port = process.env.PORT || 3000;
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.use('/onboard', onboardingrouter);
 app.use("/generate", strategyrouter);
 app.use("/create", Adcreationrouter);
+app.use("/onboardUser", onBoardUsers);
 
 
 app.listen(3000, () => {
