@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import strategyrouter from './strategy.js';
-require('dotenv').config();
+// require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 

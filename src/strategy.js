@@ -1,10 +1,11 @@
-const express = require("express");
-const axios = require("axios");
+import axios from "axios";
+import express from "express";
+
 
 const strategyrouter = express.Router();
 
 // Your Google Generative AI API Key
-const API_KEY = "YOUR_API_KEY"; // Replace with your actual API key
+const API_KEY = "AIzaSyAJsAiNg0ANu12AqWraZWKGCUa8uZ3_njA"; // Replace with your actual API key
 const MODEL_NAME = "models/gemini-1.5-flash"; // Replace with your desired model
 const API_URL = `https://generativelanguage.googleapis.com/v1beta2/${MODEL_NAME}:generateText`;
 
@@ -39,5 +40,5 @@ strategyrouter.post("/", async (req, res) => {
     }
 });
 
-module.exports = strategyrouter;
+// module.exports = strategyrouter;
 export default strategyrouter;
