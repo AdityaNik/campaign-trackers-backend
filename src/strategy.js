@@ -14,7 +14,7 @@ strategyrouter.get("/", async (req, res) => {
     // Wait for the Prisma query to finish before proceeding
     const business = await prisma.business.findUnique({
       where: {
-        id: 2,
+        id: 4,
       },
     });
 
@@ -22,8 +22,32 @@ strategyrouter.get("/", async (req, res) => {
       return res.status(404).json({ error: "Business not found" });
     }
 
-    // Construct the prompt once the business data is available
-    const prompt = `${business.name}, Product: ${business.targetAudience} Develop strategy for this business`;
+    const prompt = `Develop a comprehensive business strategy for ${business.name} which is from ${business.industry} which targets people of age group ${business.targetAge}
+    The business is targeting people in ${business.targetLocation}.The description of the company is ${business.description} and budget of business is ${business.budget}
+    Business Goals: Define short-term and long-term goals.
+
+    Target Audience Analysis: Detailed segmentation of the target audience, including demographics, preferences, and behaviors.
+
+    Trend Analysis: Identify current market trends, competitor strategies, and emerging opportunities in the industry.
+
+    Marketing Strategy:
+
+    Recommended platforms (e.g., Instagram, Google, Facebook, etc.).
+
+    Content strategy (e.g., type of content, posting frequency).
+
+    Advertising strategy (e.g., ad formats, targeting options).
+
+    Ad Campaign Costs:
+
+    Estimated costs for running ads on Instagram, Google, and other relevant platforms.
+
+    Budget allocation for each platform.
+
+    Performance Metrics: Key performance indicators (KPIs) to measure success (e.g., ROI, engagement rate, conversion rate).
+
+    Risk Assessment: Potential challenges and mitigation strategies.
+    `;
 
     console.log(prompt);
 
