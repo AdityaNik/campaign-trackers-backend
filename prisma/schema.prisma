@@ -14,18 +14,19 @@ datasource db {
 }
 
 model Business {
-  id             Int       @id @default(autoincrement())
-  name           String
-  description    String?
-  industry       String?
-  websiteUrl     String?
-  targetAudience Json?     // JSON for flexibility
-  budget         Float
-  createdAt      DateTime  @default(now())
-  campaigns      Campaign[]
-  strategies     Strategy[]
-  analytics      Analytics[]
-  customerEngagements CustomerEngagement[]
+  id                   Int                   @id @default(autoincrement())
+  name                 String
+  description          String?
+  industry             String?
+  websiteUrl           String?
+  targetLocation       String?
+  targetAudience       Json? // JSON for flexibility
+  budget               Float
+  createdAt            DateTime              @default(now())
+  campaigns            Campaign[]
+  strategies           Strategy[]
+  analytics            Analytics[]
+  customerEngagements  CustomerEngagement[]
   platformIntegrations PlatformIntegration[]
 }
 
@@ -43,82 +44,82 @@ model Business {
 // }
 
 model Campaign {
-  id          Int       @id @default(autoincrement())
-  businessId  Int
-  name        String
-  platform    String    // e.g., 'Facebook', 'Google', 'Instagram'
-  budget      Float
-  status      String    @default("draft") // e.g., 'draft', 'active', 'completed'
-  startDate   DateTime?
-  endDate     DateTime?
-  analytics   Json?     // JSON for storing performance data
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id         Int       @id @default(autoincrement())
+  businessId Int
+  name       String
+  platform   String // e.g., 'Facebook', 'Google', 'Instagram'
+  budget     Float
+  status     String    @default("draft") // e.g., 'draft', 'active', 'completed'
+  startDate  DateTime?
+  endDate    DateTime?
+  analytics  Json? // JSON for storing performance data
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
-  business    Business  @relation(fields: [businessId], references: [id])
-  content     Content[]
+  business Business  @relation(fields: [businessId], references: [id])
+  content  Content[]
 
   Analytics Analytics[]
 }
 
 model Strategy {
-  id              Int       @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   businessId      Int
   title           String
   description     String
-  recommendations Json?     // JSON for AI-generated recommendations
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  recommendations Json? // JSON for AI-generated recommendations
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  business        Business  @relation(fields: [businessId], references: [id])
+  business Business @relation(fields: [businessId], references: [id])
 }
 
 model Content {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   campaignId  Int
-  type        String    // e.g., 'ad_copy', 'image', 'video'
-  contentData String    // Stores the content or a URL to the asset
-  createdAt   DateTime  @default(now())
+  type        String // e.g., 'ad_copy', 'image', 'video'
+  contentData String // Stores the content or a URL to the asset
+  createdAt   DateTime @default(now())
 
-  campaign    Campaign  @relation(fields: [campaignId], references: [id])
+  campaign Campaign @relation(fields: [campaignId], references: [id])
 }
 
 model Analytics {
-  id          Int       @id @default(autoincrement())
-  businessId  Int
-  campaignId  Int?
-  metricName  String    // e.g., 'impressions', 'clicks', 'conversions'
-  value       Float
-  recordedAt  DateTime  @default(now())
+  id         Int      @id @default(autoincrement())
+  businessId Int
+  campaignId Int?
+  metricName String // e.g., 'impressions', 'clicks', 'conversions'
+  value      Float
+  recordedAt DateTime @default(now())
 
-  business    Business  @relation(fields: [businessId], references: [id])
-  campaign    Campaign? @relation(fields: [campaignId], references: [id])
+  business Business  @relation(fields: [businessId], references: [id])
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
 }
 
 model CustomerEngagement {
-  id              Int       @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   businessId      Int
   customerEmail   String
-  interactionType String    // e.g., 'lead', 'purchase', 'follow-up'
+  interactionType String // e.g., 'lead', 'purchase', 'follow-up'
   message         String?
-  status          String    @default("pending") // e.g., 'pending', 'completed'
-  createdAt       DateTime  @default(now())
+  status          String   @default("pending") // e.g., 'pending', 'completed'
+  createdAt       DateTime @default(now())
 
-  business        Business  @relation(fields: [businessId], references: [id])
+  business Business @relation(fields: [businessId], references: [id])
 }
 
 model PlatformIntegration {
-  id            Int       @id @default(autoincrement())
-  businessId    Int
-  platformName  String    // e.g., 'Facebook', 'Google'
-  apiKey        String
-  accessToken   String
-  refreshToken  String
-  tokenExpiry   DateTime
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           Int      @id @default(autoincrement())
+  businessId   Int
+  platformName String // e.g., 'Facebook', 'Google'
+  apiKey       String
+  accessToken  String
+  refreshToken String
+  tokenExpiry  DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  business      Business  @relation(fields: [businessId], references: [id])
+  business Business @relation(fields: [businessId], references: [id])
 }
 
 // model Notification {
