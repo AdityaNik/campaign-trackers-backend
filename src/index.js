@@ -15,9 +15,13 @@ app.use(express.json())
 app.use(cors());
 app.use(express.json())
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+    const result = await prisma.business.findMany();
+    console.log(result);
+
     res.json({
-        msg: "hii there"
+        msg: "hii there",
+        result
     })
 })
 
@@ -26,6 +30,7 @@ app.use("/generate", strategyrouter);
 app.use("/create", Adcreationrouter);
 app.use("/onboardUser", onBoardUsers);
 app.use("/gen_hook", hookrouter);
+
 
 
 app.listen(3000, () => {
