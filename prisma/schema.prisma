@@ -15,7 +15,8 @@ datasource db {
 
 model Business {
   id                   Int                   @id @default(autoincrement())
-  name                 String
+  companyName          String?
+  businessName         String?
   description          String?
   industry             String?
   websiteUrl           String?
