@@ -1,44 +1,60 @@
 import axios from "axios";
-import express from "express";
+import { Router } from "express";
+import { PrismaClient } from "@prisma/client";
+import { configDotenv } from "dotenv";
 
+configDotenv();
 
-const strategyrouter = express.Router();
+const prisma = new PrismaClient();
 
-// Your Google Generative AI API Key
-const API_KEY = "AIzaSyAJsAiNg0ANu12AqWraZWKGCUa8uZ3_njA"; // Replace with your actual API key
-const MODEL_NAME = "models/gemini-1.5-flash"; // Replace with your desired model
-const API_URL = `https://generativelanguage.googleapis.com/v1beta2/${MODEL_NAME}:generateText`;
+const strategyrouter = Router();
 
-// POST endpoint for generating content
-strategyrouter.post("/", async (req, res) => {
-    const { prompt } = req.body;
+strategyrouter.get("/", async (req, res) => {
+  try {
+    // Wait for the Prisma query to finish before proceeding
+    const business = await prisma.business.findUnique({
+      where: {
+        id: 2,
+      },
+    });
 
-    if (!prompt) {
-        return res.status(400).send({ error: "Prompt is required" });
+    if (!business) {
+      return res.status(404).json({ error: "Business not found" });
     }
+
+    // Construct the prompt once the business data is available
+    const prompt = `${business.name}, Product: ${business.targetAudience} Develop strategy for this business`;
+
+    console.log(prompt);
+
+    const data = {
+      contents: [
+        {
+          parts: [{ text: prompt }],
+        },
+      ],
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const url =
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBzRisNmv2lm0nw1fj4Kml_t-2V_KIQtn0";
 
     try {
-        const response = await axios.post(
-            API_URL,
-            { prompt: { text: prompt } }, // Request body
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${API_KEY}`,
-                },
-            }
-        );
-
-        // Send the AI-generated text back to the client
-        res.status(200).send({ output: response.data.candidates[0].output });
+      const response = await axios.post(url, data, config);
+      res.json(response.data); // Send the response data back to the client
     } catch (error) {
-        console.error("Error generating text:", error.message);
-        if (error.response) {
-            console.error("Error details:", error.response.data);
-        }
-        res.status(500).send({ error: "Failed to generate content" });
+      console.error("Error:", error);
+      res.status(500).json({ error: "Internal Server Error" }); // Send error response
     }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// module.exports = strategyrouter;
 export default strategyrouter;
