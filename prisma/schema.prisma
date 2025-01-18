@@ -20,7 +20,7 @@ model Business {
   industry             String?
   websiteUrl           String?
   targetLocation       String?
-  targetAudience       Json? // JSON for flexibility
+  targetAge            String?
   budget               Float
   createdAt            DateTime              @default(now())
   campaigns            Campaign[]

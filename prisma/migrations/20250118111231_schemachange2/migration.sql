@@ -1,0 +1,9 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `targetAudience` on the `Business` table. All the data in the column will be lost.
+
+*/
+-- AlterTable
+ALTER TABLE "Business" DROP COLUMN "targetAudience",
+ADD COLUMN     "targetAge" TEXT;

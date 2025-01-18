@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import strategyrouter from './strategy.js';
+import onboardingrouter from './OnbordingRoutes.js';
 // require('dotenv').config();
 
 const port = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ app.get('/', (req, res) => {
     })
 })
 
-
+app.use('/onboard', onboardingrouter);
 app.use("/generate", strategyrouter);
 
 

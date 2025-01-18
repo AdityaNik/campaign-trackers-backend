@@ -12,6 +12,7 @@
   "type": "module",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.2.1",
     "@types/axios": "^0.9.36",
     "@types/cors": "^2.8.17",
     "axios": "^1.7.9",
