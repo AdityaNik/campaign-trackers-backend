@@ -51,7 +51,7 @@ model Campaign {
   businessId      Int
   reditString     String?
   whatsappString  String?
-  telegramString  String?
+  twitterString  String?
   startDate       DateTime? @default(now())
   createdAt       DateTime  @default(now())
 

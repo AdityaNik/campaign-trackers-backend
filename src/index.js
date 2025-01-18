@@ -4,6 +4,7 @@ import strategyrouter from './strategy.js';
 import onboardingrouter from './OnbordingRoutes.js';
 import Adcreationrouter from './Adcreation.js';
 import onBoardUsers from './onboardingUsers.js';
+import hookrouter from './hooks.js';
 
 const port = process.env.PORT || 3000;
 
@@ -24,6 +25,7 @@ app.use('/onboard', onboardingrouter);
 app.use("/generate", strategyrouter);
 app.use("/create", Adcreationrouter);
 app.use("/onboardUser", onBoardUsers);
+app.use("/gen_hook", hookrouter);
 
 
 app.listen(3000, () => {
