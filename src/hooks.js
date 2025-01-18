@@ -4,9 +4,10 @@ import { PrismaClient } from '@prisma/client';
 import { configDotenv } from 'dotenv';
 import twilio from 'twilio';
 
+configDotenv();
 
-const accountSid = 'ACd6e7e8b6dd609fa6d37240ceca0e3173';
-const authToken = 'a2f07b869cd5dc572901c26363574b0e';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 
