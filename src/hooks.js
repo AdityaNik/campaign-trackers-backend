@@ -106,8 +106,10 @@ hookrouter.post('/', async (req, res) => {
 });
 
 
-hookrouter.get('/sendWhatsappMsg', async (req, res) => {
+hookrouter.post('/sendWhatsappMsg', async (req, res) => {
   const { id_b } = req.body;
+
+  console.log("Id is: ", id_b);
 
   const business = await prisma.business.findUnique({
     where: {
@@ -119,11 +121,7 @@ hookrouter.get('/sendWhatsappMsg', async (req, res) => {
     return res.status(404).json({ error: "Business not found" });
   }
 
-  const users = await prisma.campaignUser.findMany({
-    where: {
-      businessId: id_b,
-    },
-  });
+  const users = await prisma.campaignUser.findMany();
 
   // console.log(users);
 
@@ -145,10 +143,11 @@ hookrouter.get('/sendWhatsappMsg', async (req, res) => {
     const user = users[i];
     const template = message[i];
 
-    if (!user.phoneNumber || user.phoneNumber === '') {
+    if (!user.phoneNumber || user.phoneNumber === '' || user.phoneNumber !== '7620663395') {
       continue;
     }
 
+    console.log(user.phoneNumber);
     const result = await client.messages
       .create({
         from: 'whatsapp:+14155238886',

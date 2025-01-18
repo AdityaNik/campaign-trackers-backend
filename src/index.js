@@ -5,6 +5,9 @@ import onboardingrouter from './OnbordingRoutes.js';
 import Adcreationrouter from './Adcreation.js';
 import onBoardUsers from './onboardingUsers.js';
 import hookrouter from './hooks.js';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 const port = process.env.PORT || 3000;
 
