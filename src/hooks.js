@@ -2,32 +2,38 @@ import axios from "axios";
 import { Router } from "express";
 import { PrismaClient } from '@prisma/client';
 import { configDotenv } from 'dotenv';
+import twilio from 'twilio';
 
+
+const accountSid = 'ACd6e7e8b6dd609fa6d37240ceca0e3173';
+const authToken = 'a2f07b869cd5dc572901c26363574b0e';
+
+const client = twilio(accountSid, authToken);
 
 const hookrouter = Router();
 const prisma = new PrismaClient();
 
 hookrouter.post('/', async (req, res) => {
-    let {id_b} = req.body
-    let reddit_hook = ""
-    let twitter_hook = ""
-    let whatsapp_hook = ""
+  let { id_b } = req.body
+  let reddit_hook = ""
+  let twitter_hook = ""
+  let whatsapp_hook = ""
 
-    const business = await prisma.business.findUnique({
-      where: {
-        id: id_b,
-      },
-    });
-  
-    if (!business) {
-      return res.status(404).json({ error: "Business not found" });
-    }
+  const business = await prisma.business.findUnique({
+    where: {
+      id: id_b,
+    },
+  });
 
-    const prompt = `Develop a hook or msg which is catchy and for marketing the product to user for whatsapp , twitter and reddit based on
+  if (!business) {
+    return res.status(404).json({ error: "Business not found" });
+  }
+
+  const prompt = `Develop 3 hook or msg which is catchy and for marketing the product to user for each whatsapp , twitter and reddit based on
     the business name ${business.businessName} they have a product called ${business.productName} which is from ${business.industry} which targets people of age group ${business.targetAge}
     and marketing is focused on ${business.targetLocation}.The description of the company is ${business.description}
     
-    Display data as
+    Display data as 3 message for whatsapp , twitter and reddit
     Whatsapp : Data
     Twitter : Data
     Reddit : Data
@@ -35,60 +41,131 @@ hookrouter.post('/', async (req, res) => {
     Keep the response to the point and short not long and descriptive for one or two lines not more than that
     `;
 
-    console.log(prompt);
+  console.log(prompt);
 
-    const data = {
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
-    };
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
+  const data = {
+    contents: [
+      {
+        parts: [{ text: prompt }],
       },
-    };
+    ],
+  };
 
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBzRisNmv2lm0nw1fj4Kml_t-2V_KIQtn0";
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
-    try {
-        const response = await axios.post(url, data, config);
-        // res.json(response.data); 
-        console.log("Response data:", response.data);
+  const url =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBzRisNmv2lm0nw1fj4Kml_t-2V_KIQtn0";
 
-        let text = response.data.candidates[0].content.parts[0].text
+  try {
+    const response = await axios.post(url, data, config);
+    // res.json(response.data); 
+    // console.log("Response data:", response.data);
 
-        // Split the text into lines
-        if (text) {
-            // Use regex to extract content for each platform
-            let whatsappMatch = text.match(/\*\*Whatsapp:\*\* (.*?)(?=\n)/);
-            let twitterMatch = text.match(/\*\*Twitter:\*\* (.*?)(?=\n)/);
-            let redditMatch = text.match(/\*\*Reddit:\*\* (.*?)(?=\n)/);
-          
-            whatsapp_hook = whatsappMatch ? whatsappMatch[1].trim() : "";
-            twitter_hook = twitterMatch ? twitterMatch[1].trim() : "";
-            reddit_hook = redditMatch ? redditMatch[1].trim() : "";
+    let text = response.data.candidates[0].content.parts[0].text
+
+    const whatsappSection = text.split("**Whatsapp:**")[1].split("**Twitter:**")[0].trim();
+    const messages = whatsappSection
+      .split("\n")
+      .filter((line) => line.trim().startsWith("1.") || line.trim().startsWith("2.") || line.trim().startsWith("3."))
+      .map((line) => line.replace(/^\d\.\s*/, "").trim());
+
+    // Split the text into lines
+    // if (text) {
+    //   // Use regex to extract content for each platform
+    //   let whatsappMatch = text.match(/\*\*Whatsapp:\*\* (.*?)(?=\n)/);
+    //   let twitterMatch = text.match(/\*\*Twitter:\*\* (.*?)(?=\n)/);
+    //   let redditMatch = text.match(/\*\*Reddit:\*\* (.*?)(?=\n)/);
+
+    //   whatsapp_hook = whatsappMatch ? whatsappMatch[1].trim() : "";
+    //   twitter_hook = twitterMatch ? twitterMatch[1].trim() : "";
+    //   reddit_hook = redditMatch ? redditMatch[1].trim() : "";
+    // }
+
+    // Database logic to store the hooks
+    const result = await prisma.campaign.create({
+        data: {
+            businessId: id_b,
+            whatsappString:messages[0],
+            twitterString:messages[1],
+            reditString:messages[2],
         }
+    })
 
-        //Database logic to store the hooks
-        const result = await prisma.campaign.create({
-            data: {
-                businessId: id_b,
-                whatsappString:whatsapp_hook,
-                twitterString:twitter_hook,
-                reditString:reddit_hook,
-            }
-        })
+    res.json({result});
+    // res.json({ msg: messages })
 
-        res.json({result});
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ error: "Internal Server Error" }); 
-    }
+
+hookrouter.get('/sendWhatsappMsg', async (req, res) => {
+  const { id_b } = req.body;
+
+  const business = await prisma.business.findUnique({
+    where: {
+      id: id_b,
+    },
   });
+
+  if (!business) {
+    return res.status(404).json({ error: "Business not found" });
+  }
+
+  const users = await prisma.campaignUser.findMany({
+    where: {
+      businessId: id_b,
+    },
+  });
+
+  // console.log(users);
+
+  const messages = await prisma.campaign.findMany({
+    where: {
+      businessId: id_b,
+    },
+  });
+
+  // console.log(messages);
+
+  const message = [
+    messages[0].whatsappString,
+    messages[0].twitterString,
+    messages[0].reditString
+  ]
   
-  export default hookrouter;
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    const template = message[i];
+
+    if (!user.phoneNumber || user.phoneNumber === '') {
+      continue;
+    }
+
+    const result = await client.messages
+      .create({
+        from: 'whatsapp:+14155238886',
+        body: template,
+        to: `whatsapp:+91${user.phoneNumber}`
+      })
+      .then(message => console.log(message.sid))
+      .catch(error => console.error(error));
+
+      console.log(result);
+  }
+
+
+  res.json({
+    msg: 'Whatsapp message sent successfully',
+    data: users
+  })
+})
+
+
+export default hookrouter;
