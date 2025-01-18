@@ -14,7 +14,7 @@ strategyrouter.get("/", async (req, res) => {
     // Wait for the Prisma query to finish before proceeding
     const business = await prisma.business.findUnique({
       where: {
-        id: 4,
+        id: 1,
       },
     });
 

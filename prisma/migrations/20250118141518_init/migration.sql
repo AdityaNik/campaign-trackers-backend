@@ -1,12 +1,14 @@
 -- CreateTable
 CREATE TABLE "Business" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "businessName" TEXT,
+    "productName" TEXT,
+    "email" TEXT,
     "description" TEXT,
     "industry" TEXT,
     "websiteUrl" TEXT,
     "targetLocation" TEXT,
-    "targetAudience" JSONB,
+    "targetAge" TEXT,
     "budget" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

@@ -10,13 +10,14 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     
-    const {id, companyName, businessName, description, industry, websiteUrl, targetLocation, targetAge, budget } = req.body;
+    const {id, businessName, productName, email, description, industry, websiteUrl, targetLocation, targetAge, budget } = req.body;
 
     const result = await prisma.business.create({
         data: {
             id,
-            companyName,
             businessName,
+            productName,
+            email,
             description,
             industry,
             websiteUrl,
