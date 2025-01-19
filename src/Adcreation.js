@@ -85,18 +85,18 @@ Adcreationrouter.post("/", async (req, res) => {
 
   for (const ad of ads) {
     const data = {
-      template: "agXkA3Dw1aXWZW2VBY", // Replace with your actual template ID
+      template: "97xPQmDnpPELZG3E82", // Replace with your actual template ID
       modifications: [
         {
           name: "message",
           text: ad.titleText, // Dynamically set the title text
         },
         {
-          name: "qr_code_6",
+          name: "qr_code_5",
           target: ad.qrCode, // Dynamically set the QR code URL
         },
         {
-          name: "text_container_5",
+          name: "text_container_6",
           text: ad.description, // Dynamically set the description
         },
         {
