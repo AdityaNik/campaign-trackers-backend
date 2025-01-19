@@ -85,7 +85,7 @@ Adcreationrouter.post("/", async (req, res) => {
 
   for (const ad of ads) {
     const data = {
-      template: "97xPQmDnpPELZG3E82", // Replace with your actual template ID
+      template: "20KwqnDE62YQbl17dY", // Replace with your actual template ID
       modifications: [
         {
           name: "message",
